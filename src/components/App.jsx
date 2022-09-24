@@ -1,6 +1,9 @@
+import css from "./App.module.css"
+
+
 export const App = () => {
   return (
-    <div
+    <div className={css.App}
       style={{
         height: '100vh',
         display: 'flex',
