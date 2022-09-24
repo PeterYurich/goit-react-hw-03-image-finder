@@ -15,7 +15,13 @@ export class SearchForm extends Component {
   handleSubmit = evt => {
     evt.preventDefault();
 
+    if (this.state.request.trim() === '') {
+      alert('enter something')
+      return
+    }
+
     this.props.saveRequest(this.state.request);
+    this.setState({request: ''})
   };
 
   render() {
