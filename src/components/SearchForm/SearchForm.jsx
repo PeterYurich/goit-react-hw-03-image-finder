@@ -15,8 +15,7 @@ export class SearchForm extends Component {
   handleSubmit = evt => {
     evt.preventDefault();
 
-    this.props.onSubmit(this.state.request);
-    this.setState({ request: evt.currentTarget.value.toLouerCase() });
+    this.props.saveRequest(this.state.request);
   };
 
   render() {

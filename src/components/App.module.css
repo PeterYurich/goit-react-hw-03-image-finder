@@ -4,3 +4,9 @@
     grid-gap: 16px;
     padding-bottom: 24px;
   }
+
+.asd {
+  width: 10px;
+  height: 10px;
+  background-color: red;
+}

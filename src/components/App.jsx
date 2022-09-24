@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import css from './App.module.css';
 
-import { Searchbar } from './Searchbar/Searchbar';
+// import { Searchbar } from './Searchbar/Searchbar';
 import { SearchForm } from './SearchForm/SearchForm';
 
 export class App extends Component {
@@ -13,25 +13,30 @@ export class App extends Component {
   };
 
   componentDidMount() {
-    const { API_KEY, request,  } = this.state;
+    const { API_KEY, request } = this.state;
 
     // this.setState({loading: true});
     fetch(
       `https://pixabay.com/api/?key=${API_KEY}&q=${request}&image_type=photo"`
     )
       .then(res => res.json())
-      .then(pictures => this.setState({ pictures }))
-      // .finally(this.setState({loading: false}));
+      .then(pictures => this.setState({ pictures }));
+    // .finally(this.setState({loading: false}));
   }
 
-  // sendRequest = () => {  }
+  saveRequest = (request) => {
+    this.setState({request: request})
+  }
 
   render() {
+    const { request } = this.state;
+
+
     return (
       <div className={css.App}>
-        <Searchbar>
-          <SearchForm></SearchForm>
-        </Searchbar>
+        <div>
+          <SearchForm saveRequest={this.saveRequest}></SearchForm>
+        </div>
       </div>
     );
   }
