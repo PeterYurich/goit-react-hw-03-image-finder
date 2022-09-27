@@ -21,26 +21,31 @@ export class ImageGallery extends Component {
     if (this.props !== prevProps) {
       this.setState({ status: 'pending' });
       // setTimeout(() => {
-        fetch(
-          `https://pixabay.com/api/?key=${API_KEY}&q=${request}&image_type=photo"`
-        )
-          .then(res => {
-            console.log("res:", res)
-            if (res.ok) {
+      fetch(
+        `https://pixabay.com/api/?key=${API_KEY}&q=${request}&image_type=photo"`
+      )
+        .then(res => {
+          console.log('res:', res);
+          if (res.ok) {
             // console.log("res.json():", res.json())
-              return res.json();
-            }
-            return Promise.reject(new Error(`no pictures, found by "${request}"`));
-          })
-          .then(res => {
-            console.log("pictures:", res)
-            return this.setState({ pictures: res.hits, status: 'resolved' })
+            return res.json();
           }
-          )
-          .catch(error => {
-            console.log('error is:', error);
-            this.setState({ status: 'rejected' });
-          });
+          return Promise.reject(
+            new Error(`no pictures, found by "${request}"`)
+          );
+        })
+        .then(res => {
+          console.log('pictures:', res.hits);
+          if (res.hits.length === 0) {
+            this.setState({ status: 'nothingFound' })
+            return
+          }
+          this.setState({ pictures: res.hits, status: 'resolved' });
+        })
+        .catch(error => {
+          console.log('error is:', error);
+          this.setState({ status: 'rejected' });
+        });
       // }, 1000);
     }
   }
@@ -48,7 +53,7 @@ export class ImageGallery extends Component {
   render() {
     const { pictures, status } = this.state;
     const { openModal } = this.props;
-    console.log("this.state.pictures:", this.state.pictures)
+    console.log('this.state.pictures:', this.state.pictures);
 
     return (
       <div>
