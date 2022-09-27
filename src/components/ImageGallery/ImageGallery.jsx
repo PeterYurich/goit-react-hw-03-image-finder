@@ -20,7 +20,7 @@ export class ImageGallery extends Component {
 
     if (this.props !== prevProps) {
       this.setState({ status: 'pending' });
-      setTimeout(() => {
+      // setTimeout(() => {
         fetch(
           `https://pixabay.com/api/?key=${API_KEY}&q=${request}&image_type=photo"`
         )
@@ -41,7 +41,7 @@ export class ImageGallery extends Component {
             console.log('error is:', error);
             this.setState({ status: 'rejected' });
           });
-      }, 1000);
+      // }, 1000);
     }
   }
 
@@ -55,11 +55,11 @@ export class ImageGallery extends Component {
         {status === 'pending' && (
           <div className={css.Loader}>
             <Audio
-              height="80"
-              width="80"
-              radius="9"
-              color="green"
-              ariaLabel="three-dots-loading"
+              height="200"
+              width="200"
+              radius="15"
+              color="blue"
+              ariaLabel="five-dots-loading"
               wrapperStyle
               wrapperClass
             />
