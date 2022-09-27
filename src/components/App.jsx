@@ -9,7 +9,7 @@ export class App extends Component {
   state = {
     request: 'red roses wet',
     showModal: false,
-    largeImageURL: "",
+    largeImageURL: '',
   };
 
   saveRequest = request => {
@@ -17,25 +17,29 @@ export class App extends Component {
   };
 
   toggleModal = () => {
-    this.setState(({showModal}) => ({
+    this.setState(({ showModal }) => ({
       showModal: !showModal,
     }));
   };
 
-  pictureZoom = (evt) => {
-    this.setState({ largeImageURL: evt.target.alt})
-    this.toggleModal()
-    
-  }
+  pictureToModal = evt => {
+    this.setState({ largeImageURL: evt.target.alt });
+    this.toggleModal();
+  };
 
   render() {
     const { request, showModal, largeImageURL } = this.state;
 
     return (
       <div className={css.App}>
-        {showModal && <Modal largeImageURL={largeImageURL}/>}
-        <Searchbar saveRequest={this.saveRequest} ></Searchbar>
-        <ImageGallery request={request} pictureZoom={this.pictureZoom}></ImageGallery>
+        <Searchbar saveRequest={this.saveRequest}></Searchbar>
+        <ImageGallery
+          request={request}
+          openModal={this.pictureToModal}
+        ></ImageGallery>
+        {showModal && (
+          <Modal largeImageURL={largeImageURL} toggleModal={this.toggleModal} />
+        )}
       </div>
     );
   }
