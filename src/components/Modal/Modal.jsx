@@ -8,7 +8,6 @@ export class Modal extends Component {
   
   
   componentDidMount() {
-    console.log("asd1")
     window.addEventListener('keydown', this.closeModalByEsc);
   }
 
@@ -17,7 +16,6 @@ export class Modal extends Component {
   }
 
   closeModalByEsc = (evt) => {
-    console.log("asd2")
     if (evt.code === 'Escape') {
       this.props.toggleModal()
     }

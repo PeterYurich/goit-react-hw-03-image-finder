@@ -10,3 +10,8 @@
   height: 10px;
   background-color: red;
 }
+
+.Loader {
+  display: flex;
+  justify-content: center;
+}
