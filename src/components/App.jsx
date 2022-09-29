@@ -28,13 +28,11 @@ export class App extends Component {
         `https://pixabay.com/api/?key=${API_KEY}&q=${request}&image_type=photo&orientation=horizontal&safesearch=true&per_page=12&page=${page}`
       )
         .then(res => {
-          // console.log('res:', res);
           if (res.ok) {
             return res.json();
           }
         })
         .then(res => {
-          // console.log('pictures:', res.hits);
           if (res.hits.length === 0) {
             this.setState({ status: 'nothingFound' });
             return;
@@ -92,7 +90,7 @@ export class App extends Component {
         <Searchbar saveRequest={this.saveRequest}></Searchbar>
 
         {status === 'pending' && (
-          <div >
+          <div className={css.Loader} >
             <Audio
               height="200"
               width="200"
