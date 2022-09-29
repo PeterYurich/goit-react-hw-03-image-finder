@@ -9,7 +9,7 @@ const moadlRoot = document.querySelector('#modal-root');
 
 export class Modal extends Component {
   
-  propTypes = {
+  static propTypes = {
     toggleModal: PropTypes.func.isRequired,
     largeImageURL: PropTypes.string.isRequired
   }
@@ -31,7 +31,6 @@ export class Modal extends Component {
 
   closeModalByClickAround = (evt) => {
     if (evt.target === evt.currentTarget) {
-      console.log("asd3")
       this.props.toggleModal()
     }
   }

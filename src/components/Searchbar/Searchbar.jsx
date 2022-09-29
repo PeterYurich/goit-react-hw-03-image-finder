@@ -6,7 +6,7 @@ import css from './Searchbar.module.css';
 export class Searchbar extends Component {
 
   static propTypes = {
-    request: PropTypes.string.isRequired
+    request: PropTypes.string
   }
   
   state = {
