@@ -6,6 +6,14 @@ import css from './ImageGallery.module.css';
 import { ImageGalleryItem } from 'components/ImageGalleryItem/ImageGalleryItem';
 
 export class ImageGallery extends Component {
+
+  static propTypes = {
+    pictures: PropTypes.arrayOf(PropTypes.exact({
+      id: PropTypes.string.isRequired
+    })),
+    openModal: PropTypes.func.isRequired
+  }
+  
   state = {
     pictures: null,
     isLoadMoreBtn: false,

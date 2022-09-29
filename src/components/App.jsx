@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import css from './App.module.css';
 import { Audio } from 'react-loader-spinner';
-// import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 import { Searchbar } from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
@@ -14,16 +13,16 @@ export class App extends Component {
     showModal: false,
     API_KEY: '29220368-6467898673c76bc95c006b920',
     page: 1,
-    pictures: null,
+    pictures: [],
     largeImageURL: '',
     isLoadMoreBtn: false,
     status: 'idle',
   };
 
   async componentDidUpdate(prevProps, prevState) {
-    const { API_KEY, page, request } = this.state;
+    const { API_KEY, page, request, pictures } = this.state;
 
-    if (request !== prevState.request) {
+    if ((request !== prevState.request) || (page !== prevState.page)) {
       this.setState({ status: 'pending' });
       fetch(
         `https://pixabay.com/api/?key=${API_KEY}&q=${request}&image_type=photo&orientation=horizontal&safesearch=true&per_page=12&page=${page}`
@@ -41,7 +40,7 @@ export class App extends Component {
             return;
           }
           this.setState({
-            pictures: res.hits,
+            pictures: [...pictures, ...res.hits],
             status: 'resolved',
             isLoadMoreBtn: true,
           });
@@ -73,9 +72,9 @@ export class App extends Component {
   };
 
   toNextPage = () => {
-    this.setState(() => {
-      this.state.page += 1
-    })
+    this.setState(prevState => ({
+      page: prevState.page + 1
+    }))
   }
 
   render() {
@@ -93,7 +92,7 @@ export class App extends Component {
         <Searchbar saveRequest={this.saveRequest}></Searchbar>
 
         {status === 'pending' && (
-          <div className={css.Loader_container}>
+          <div >
             <Audio
               height="200"
               width="200"
@@ -101,11 +100,11 @@ export class App extends Component {
               color="blue"
               ariaLabel="five-dots-loading"
               wrapperStyle
-              wrapperClass
+              wrapperClassName="css.Loader_container"
             />
           </div>
         )}
-
+ 
         {status === 'resolved' && (
           <ImageGallery
             openModal={this.pictureToModal}

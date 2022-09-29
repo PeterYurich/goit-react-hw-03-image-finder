@@ -1,8 +1,14 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types'
 
 import css from './Searchbar.module.css';
 
 export class Searchbar extends Component {
+
+  static propTypes = {
+    request: PropTypes.string.isRequired
+  }
+  
   state = {
     request: '',
   };
