@@ -9,10 +9,12 @@ import { Modal } from './Modal/Modal';
 
 export class App extends Component {
   state = {
+    API_KEY: '29220368-6467898673c76bc95c006b920',
+    PER_PAGE: 12,
+    page: 1,
+    totalPictures: 0,
     request: '',
     showModal: false,
-    API_KEY: '29220368-6467898673c76bc95c006b920',
-    page: 1,
     pictures: [],
     largeImageURL: '',
     isLoadMoreBtn: false,
@@ -20,12 +22,15 @@ export class App extends Component {
   };
 
   async componentDidUpdate(prevProps, prevState) {
-    const { API_KEY, page, request, pictures } = this.state;
+    const { API_KEY, PER_PAGE, page, request, pictures } = this.state;
 
-    if ((request !== prevState.request) || (page !== prevState.page)) {
+    if (request !== prevState.request || page !== prevState.page) {
       this.setState({ status: 'pending' });
+
+      setTimeout( () => {
+
       fetch(
-        `https://pixabay.com/api/?key=${API_KEY}&q=${request}&image_type=photo&orientation=horizontal&safesearch=true&per_page=12&page=${page}`
+        `https://pixabay.com/api/?key=${API_KEY}&q=${request}&image_type=photo&orientation=horizontal&safesearch=true&per_page=${PER_PAGE}&page=${page}`
       )
         .then(res => {
           if (res.ok) {
@@ -39,6 +44,7 @@ export class App extends Component {
           }
           this.setState({
             pictures: [...pictures, ...res.hits],
+            totalPictures: res.total,
             status: 'resolved',
             isLoadMoreBtn: true,
           });
@@ -47,11 +53,16 @@ export class App extends Component {
           console.log('error is:', error);
           this.setState({ status: 'rejected' });
         });
-    }
+        
+      }, 1000)
+      }
   }
 
-  saveRequest = request => {
-    this.setState({ request: request });
+  saveRequest = newRequest => {
+    const { request } = this.state;
+    if (newRequest !== request) {
+      this.setState({ request: newRequest, page: 1, pictures: [] });
+    }
   };
 
   toggleModal = () => {
@@ -71,9 +82,9 @@ export class App extends Component {
 
   toNextPage = () => {
     this.setState(prevState => ({
-      page: prevState.page + 1
-    }))
-  }
+      page: prevState.page + 1,
+    }));
+  };
 
   render() {
     const {
@@ -83,14 +94,23 @@ export class App extends Component {
       isLoadMoreBtn,
       status,
       pictures,
+      totalPictures,
     } = this.state;
 
     return (
       <div className={css.App}>
         <Searchbar saveRequest={this.saveRequest}></Searchbar>
 
+        {pictures.length > 0 && (
+          <ImageGallery
+            openModal={this.pictureToModal}
+            showLoadMoreBtn={this.showLoadMoreBtn}
+            pictures={pictures}
+          ></ImageGallery>
+        )}
+
         {status === 'pending' && (
-          <div className={css.Loader} >
+          <div className={css.Loader}>
             <Audio
               height="200"
               width="200"
@@ -101,14 +121,6 @@ export class App extends Component {
               wrapperClassName="css.Loader_container"
             />
           </div>
-        )}
- 
-        {status === 'resolved' && (
-          <ImageGallery
-            openModal={this.pictureToModal}
-            showLoadMoreBtn={this.showLoadMoreBtn}
-            pictures={pictures}
-          ></ImageGallery>
         )}
 
         {status === 'nothingFound' && (
@@ -122,7 +134,9 @@ export class App extends Component {
           </p>
         )}
 
-        {isLoadMoreBtn && <LoadMoreBtn onClick={this.toNextPage}></LoadMoreBtn>}
+        {isLoadMoreBtn && pictures.length < totalPictures && status !== 'pending' && (
+          <LoadMoreBtn onClick={this.toNextPage}></LoadMoreBtn>
+        )}
 
         {showModal && (
           <Modal largeImageURL={largeImageURL} toggleModal={this.toggleModal} />

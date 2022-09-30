@@ -8,7 +8,7 @@ import { ImageGalleryItem } from 'components/ImageGalleryItem/ImageGalleryItem';
 export class ImageGallery extends Component {
 
   static propTypes = {
-    pictures: PropTypes.arrayOf(PropTypes.exact({
+    pictures: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.string.isRequired
     })),
     openModal: PropTypes.func.isRequired
@@ -23,8 +23,6 @@ export class ImageGallery extends Component {
 
   render() {
     const { pictures, openModal } = this.props;
-
-    // console.log('this.state.pictures:', this.state.pictures);
 
     return (
           <ul className={css.ImageGallery}>
